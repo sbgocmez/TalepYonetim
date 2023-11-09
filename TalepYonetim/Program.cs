@@ -1,7 +1,16 @@
+using Microsoft.Extensions.Options;
+using TalepYonetim.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddDbContext<ApplicationDbContext>(options=> options.UseSqlServer(
+    builder.Configuration.GetConnectionString("Default")
+    ));
+
 
 var app = builder.Build();
 
