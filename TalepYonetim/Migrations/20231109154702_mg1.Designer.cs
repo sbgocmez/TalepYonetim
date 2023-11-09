@@ -11,8 +11,8 @@ using TalepYonetim.Data;
 namespace TalepYonetim.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231109102049_m1")]
-    partial class m1
+    [Migration("20231109154702_mg1")]
+    partial class mg1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

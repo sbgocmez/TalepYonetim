@@ -5,7 +5,7 @@
 namespace TalepYonetim.Migrations
 {
     /// <inheritdoc />
-    public partial class m1 : Migration
+    public partial class mg1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,8 +29,8 @@ namespace TalepYonetim.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    KategoriId = table.Column<int>(type: "int", nullable: false)
+                    KategoriId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,11 +49,11 @@ namespace TalepYonetim.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    AltKategoriId = table.Column<int>(type: "int", nullable: false),
                     Aciklama = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Adet = table.Column<int>(type: "int", nullable: false),
                     Edenİsim = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EdenSoyisim = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AltKategoriId = table.Column<int>(type: "int", nullable: false)
+                    EdenSoyisim = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

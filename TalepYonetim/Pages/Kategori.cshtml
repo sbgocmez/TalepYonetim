@@ -1,7 +1,7 @@
 ﻿@page
-@model IndexModel
+@model KategoriModel
 @{
-    ViewData["Title"] = "Home page";
+	ViewData["Title"] = "Home page";
 }
 
 <div class="container p-3">
@@ -22,42 +22,44 @@
 		<thead>
 			<tr>
 				<th>
-					Talep Çeşidi
+					Alt Kategori Id
 				</th>
 				<th>
-					Talep Adı
+					Ana Kategori Id
 				</th>
 				<th>
-					Talep Eden Ad
+					Alt kategori adı
 				</th>
 				<th>
-					Talep Eden Soyad
+					[Navigation] Ana kategori Name
 				</th>
 				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			@foreach(var obj in Model.Kategoriler)
+			@foreach (var obj in Model.AltKategoriler)
 			{
 				<tr>
 					@* <td width="30%">@obj.AltKategori.Kategori.Name</td> *@
 					@* <td width="30%">@obj.Id</td> *@
+					<td width="30%">@obj.Id</td>
+					<td width="30%">@obj.KategoriId</td>
 					<td width="30%">@obj.Name</td>
-					@* <td width="30%">@obj.Kategori.</td> *@
+					<td width="30%">@obj.Kategori.Name</td>
 					@* <td width="30%">@obj.Kategori.Name</td> *@
 					@* <td>
-						<div class="w-75 btn-group" role="group">
-						<a asp-page="Edit" asp-route-id="@obj.Id" class="btn btn-primary mx-2">
-							<i class="bi bi-pencil-square"></i>
-						</a>
-						<a asp-page="Delete" asp-route-id="@obj.Id"  class="btn btn-danger mx-2">
-							<i class="bi bi-trash-fill"></i>
-						</a>
-						</div>
-					</td> *@
+				<div class="w-75 btn-group" role="group">
+				<a asp-page="Edit" asp-route-id="@obj.Id" class="btn btn-primary mx-2">
+				<i class="bi bi-pencil-square"></i>
+				</a>
+				<a asp-page="Delete" asp-route-id="@obj.Id"  class="btn btn-danger mx-2">
+				<i class="bi bi-trash-fill"></i>
+				</a>
+				</div>
+				</td> *@
 				</tr>
 			}
-			
+
 		</tbody>
 	</table>
 </div>

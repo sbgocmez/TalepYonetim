@@ -7,6 +7,6 @@ namespace TalepYonetim.Model
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
-        public ICollection<AltKategori> AltKategoriler { get; set; }
+        public ICollection<AltKategori> AltKategoriler { get; } = new List<AltKategori>();
     }
 }
