@@ -19,20 +19,20 @@ namespace TalepYonetim.Pages
 		}
 		public void OnGet()
 		{
-			var python = _db.AltKategoriler.First(u => u.Name == "Python");
+			var bilg = _db.AltKategoriler.First(u => u.Name == "Visual Studio");
 
 
 			var talep = new Talep
 			{
-				Aciklama = "Stajyer bilgisayarlarýna yüklenmelidir",
-				Adet = 2,
-				EdenÝsim = "Erdem",
-				EdenSoyisim = "Þimþek",
-				AltKategori = python
+				Aciklama = "Bilgisayarýma yüklenmelidir",
+				Adet = 1,
+				EdenÝsim = "Kayra",
+				EdenSoyisim = "Boyacý",
+				AltKategori = bilg
 			};
 
-			//_db.Talepler.Add(talep);
-			//_db.SaveChanges();
+			_db.Talepler.Add(talep);
+			_db.SaveChanges();
 			//var kirtasiye = new Kategori
 			//{
 			//	Name = "Kýrtasiye"

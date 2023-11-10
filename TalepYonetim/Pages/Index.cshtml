@@ -7,7 +7,7 @@
 <div class="container p-3">
 	<div class="row pt-4">
 		<div class="col-6">
-			<h2 class="text-primary">Category List</h2>
+			<h2 class="text-primary">Talepler</h2>
 		</div>
 		<div class="col-6 text-end">
 			<a asp-page="create" class="btn btn-primary">
@@ -37,84 +37,85 @@
 					İşlemler
 				</th>
 			</tr>
-			@{
-				int pageSize = 1; // Number of items per page
-				int currentPage = Request.Query["page"].FirstOrDefault() != null ? Convert.ToInt32(Request.Query["page"]) : 1; // Get current page from the query parameter, default to 1
-				var items = Model.Talepler.Skip((currentPage - 1) * pageSize).Take(pageSize);
-				int totalPages = (int)Math.Ceiling((double)Model.Talepler.Count() / pageSize);
-				int paginationSize = 3;
-			}
-		</thead>
-		<tbody>
-			@foreach (var obj in Model.Talepler.Skip((currentPage - 1) * pageSize).Take(pageSize))
-			{
-				<tr>
-					<td width="18%">@obj.AltKategori.Name</td>
-					<td width="18%">@obj.AltKategori.Kategori.Name</td>
-					<td width="18%">@obj.Edenİsim</td>
-					<td width="18%">@obj.EdenSoyisim</td>
-					<td class="text-center"  width="28%">
-						<div class=" btn-group-justified" role="group">
-							<button type="button" class="btn btn-success btn-block">Onayla</button>
-							<button type="button" class="btn btn-warning btn-block">Düzenle</button>
-							<button type="button" class="btn btn-danger  btn-block">Sil</button>
-						</div>
-					</td>
-				</tr>
-			}
-			
-		</tbody>
-	</table>
-	<!-- Compact Pagination -->
-	<div class="d-flex justify-content-center">
-		<nav aria-label="Page navigation">
-			<ul class="pagination">
-				<li class="page-item @(currentPage == 1 ? "disabled" : "")">
-					<a class="page-link" href="?page=@(currentPage - 1)" aria-label="Previous">
-						<span aria-hidden="true">&laquo;</span>
-					</a>
-				</li>
+            @{
+                int pageSize = 3; // Number of items per page
+                int currentPage = Request.Query["page"].FirstOrDefault() != null ? Convert.ToInt32(Request.Query["page"]) : 1; // Get current page from the query parameter, default to 1
+                var items = Model.Talepler.Skip((currentPage - 1) * pageSize).Take(pageSize);
+                int totalPages = (int)Math.Ceiling((double)Model.Talepler.Count() / pageSize);
+                int paginationSize = 3;
+                var half = (int)(paginationSize / 2);
+            }
+        </thead>
+        <tbody>
+            @foreach (var obj in items)
+            {
+                <tr>
+                    <td width="18%">@obj.AltKategori.Name</td>
+                    <td width="18%">@obj.AltKategori.Kategori.Name</td>
+                    <td width="18%">@obj.Edenİsim</td>
+                    <td width="18%">@obj.EdenSoyisim</td>
+                    <td class="text-center" width="28%">
+                        <div class=" btn-group-justified" role="group">
+                            <button type="button" class="btn btn-success btn-block">Onayla</button>
+                            <button type="button" class="btn btn-warning btn-block">Düzenle</button>
+                            <button type="button" class="btn btn-danger  btn-block">Sil</button>
+                        </div>
+                    </td>
+                </tr>
+            }
 
-				@if (currentPage == 1)
-				{
-					// Display all pages if total pages are 3 or fewer
-					for (int i = currentPage; i < currentPage+paginationSize; i++)
-					{
-						<li class="page-item @(i == currentPage ? "active" : "")">
-							<a class="page-link" href="?page=@i">@i</a>
-						</li>
-					}
-				}
-				else if (currentPage == totalPages)
-				{
-					// Display all pages if total pages are 3 or fewer
-					for (int i = currentPage-paginationSize+1; i <= currentPage; i++)
-					{
-						<li class="page-item @(i == currentPage ? "active" : "")">
-							<a class="page-link" href="?page=@i">@i</a>
-						</li>
-					}
-					
-				}
-				else
-				{
-					// Display a limited number of pages based on the current page
-					var half = (int)(paginationSize / 2);
-					for (int i = Math.Max(1, currentPage - half); i <= Math.Min(totalPages, currentPage + half); i++)
-					{
-						<li class="page-item @(i == currentPage ? "active" : "")">
-							<a class="page-link" href="?page=@i">@i</a>
-						</li>
-					}
-				}
+        </tbody>
+    </table>
+    <!-- Compact Pagination -->
+    <div class="d-flex justify-content-center">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" href="?page=@(currentPage - 1)" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
 
-				<li class="page-item @(currentPage == totalPages ? "disabled" : "")">
-					<a class="page-link" href="?page=@(currentPage + 1)" aria-label="Next">
-						<span aria-hidden="true">&raquo;</span>
-					</a>
-				</li>
-			</ul>
-		</nav>
-	</div>
+                @if (currentPage == 1)
+                {
+                    // first page
+                    for (int i = currentPage; i < currentPage + paginationSize; i++)
+                    {
+                        <li class="page-item @(i == currentPage ? "active" : "")">
+                            <a class="page-link" href="?page=@i">@i</a>
+                        </li>
+                    }
+                }
+                else if (currentPage == totalPages)
+                {
+                    // last page
+                    for (int i = currentPage - paginationSize + 1; i <= currentPage; i++)
+                    {
+                        <li class="page-item @(i == currentPage ? "active" : "")">
+                            <a class="page-link" href="?page=@i">@i</a>
+                        </li>
+                    }
+
+                }
+                else
+                {
+                    // middle ones
+                    for (int i = Math.Max(1, currentPage - half); i <= Math.Min(totalPages, currentPage + half); i++)
+                    {
+                        <li class="page-item @(i == currentPage ? "active" : "")">
+                            <a class="page-link" href="?page=@i">@i</a>
+                        </li>
+                    }
+                }
+
+                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                    <a class="page-link" href="?page=@(currentPage + 1)" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
 
 </div>
