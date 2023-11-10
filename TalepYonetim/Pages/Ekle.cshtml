@@ -1,0 +1,96 @@
+﻿@page
+@model TalepYonetim.Pages.EkleModel
+@{
+    ViewData["Title"] = "Yeni Talep";
+}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Yeni Talep Ekle</h2>
+            <hr />
+            <div class="mb-3">
+
+                <label asp-for="@Model.Talep.Aciklama">Açıklama</label>
+                <input asp-for="@Model.Talep.Aciklama" class="form-control" />
+
+                <label asp-for="@Model.Talep.Adet">Adet</label>
+                <input asp-for="@Model.Talep.Adet" class="form-control" />
+
+                <label asp-for="@Model.Talep.Edenİsim">Talep Edenin Adı</label>
+                <input asp-for="@Model.Talep.Edenİsim" class="form-control" />
+
+                <label asp-for="@Model.Talep.EdenSoyisim">Talep Edenin Soyadı</label>
+                <input asp-for="@Model.Talep.EdenSoyisim" class="form-control" />
+                <hr />
+                <button type="submit" class="btn btn-success" style="width:150px">Insert</button>
+            </div>
+
+            <div class="mb-3">
+                <label for="talepKategoriId" class="form-label">Kategori</label>
+                <select class="form-control" id="talepKategoriId">
+                    @foreach (var kategori in Model.Kategoriler)
+                    {
+                        <option value="@kategori.Id">@kategori.Name</option>
+                    }
+
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="subCategory" class="form-label">Alt Kategori</label>
+                <select class="form-control" id="subCategory" name="subCategory">
+                    <!-- Options will be dynamically populated using jQuery AJAX -->
+                </select>
+            </div>
+
+            <script>
+                console.log("hellooooooo");
+                </script>
+
+            <script>
+                $(document).ready(function () {
+                    console.log("helloooo222ooo");
+                    // Event listener for the main category dropdown change
+                    $('#talepKategoriId').change(function () {
+                        // Clear the existing options
+                        $('#subCategory').empty();
+
+                        console.log("changedd");
+                        // Get the selected main category
+                        var selectedMainCategory = $(this).val();
+
+                        console.log(selectedMainCategory);
+                        // ajax call
+                        $.ajax({
+                            type: 'GET',
+                            url: '/Ekle?handler=AltKategoriler', // bu syntax onemli OnGet otomotikmen algilaniyor razordan
+                            data: { talepEdilenKategoriId: selectedMainCategory },
+                            dataType: 'json',
+                          
+                            success: function (subCategories) {
+                                //$('#subCategory').empty();
+                                console.log("Received subCategories:", subCategories);
+
+                                // Populate the subcategory dropdown based on the response
+                                $.each(subCategories, function (index, subCategory) {
+                                    $('#subCategory').append($('<option>', {
+                                        value: subCategory.id, // replace with the actual property name for the value
+                                        text: subCategory.name // replace with the actual property name for the text
+                                    }));
+                                });
+                            },
+                            error: function () {
+                                console.error('Error fetching subcategories');
+                            }
+                        });
+                    });
+                });
+            </script>
+           
+
+        </div>
+
+    </div>
+</form>
