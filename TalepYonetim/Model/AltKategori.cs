@@ -7,10 +7,11 @@ namespace TalepYonetim.Model
     {
         public int Id { get; set; }
         
-        public int KategoriId { get; set; }
+        //public int KategoriId { get; set; }
         public string Name { get; set; }
-		[ForeignKey(nameof(KategoriId))]
-		public virtual Kategori Kategori { get; set; } = null!;
-        public virtual ICollection<Talep> Talepler{ get; set; }
+		[ForeignKey(nameof(Kategori))]
+        public int KategoriId { get; set; }
+		public virtual Kategori Kategori { get; set; } = new Kategori ();
+        public virtual ICollection<Talep> Talepler{ get; set; } = new List<Talep> ();
     }
 }

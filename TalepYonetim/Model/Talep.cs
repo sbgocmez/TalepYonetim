@@ -12,7 +12,7 @@ namespace TalepYonetim.Model
         public int Adet {  get; set; }
         public string Edenİsim {  get; set; }
         public string EdenSoyisim { get; set; }
-        public virtual AltKategori AltKategori { get; set; }
+        public virtual AltKategori AltKategori { get; set; } = new AltKategori();
 
     }
 }
