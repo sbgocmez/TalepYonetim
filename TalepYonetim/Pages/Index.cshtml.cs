@@ -23,5 +23,24 @@ namespace TalepYonetim.Pages
 			Talepler = _db.Talepler.Include(a => a.AltKategori).ThenInclude(b=>b.Kategori);
 		}
 
+        //[BindProperty]
+        //public int Id { get; set; }
+
+        [HttpPost]
+        public async Task<IActionResult> OnPost(int id)
+        {
+            var talep = await _db.Talepler.FindAsync(id);
+
+            if (talep == null)
+            {
+                return NotFound();
+            }
+
+            _db.Talepler.Remove(talep);
+            await _db.SaveChangesAsync();
+
+            return RedirectToPage("Index");
+        }
+
     }
 }

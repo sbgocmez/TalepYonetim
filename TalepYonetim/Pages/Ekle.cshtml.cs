@@ -10,24 +10,31 @@ namespace TalepYonetim.Pages
         private readonly ApplicationDbContext _db;
         public IEnumerable<AltKategori> AltKategoriler { get; set; }
         public IEnumerable<Kategori> Kategoriler { get; set; }
+
+        public AltKategori selectedAltKategori { get; set; } = new AltKategori();
+
         public Talep Talep { get; set; } = new Talep();
 
         public EkleModel(ApplicationDbContext db)
         {
             _db = db;
+            AltKategoriler = _db.AltKategoriler;
+            Kategoriler = _db.Kategoriler;
         }
 
         public void OnGet()
         {
-            AltKategoriler = _db.AltKategoriler;
-            Kategoriler = _db.Kategoriler;
         }
 
-        public IActionResult OnPost() 
+        public async Task<IActionResult> OnPost(Talep talep) 
         {
-            AltKategoriler = _db.AltKategoriler;
-            Kategoriler = _db.Kategoriler;
-            return Page();
+            // direkt altkategori donebilsem cok daha iyi olucak
+            var alt = _db.AltKategoriler.First(alt => alt.Id == talep.AltKategoriId);
+            talep.AltKategori = alt;
+            
+            await _db.Talepler.AddAsync(talep);
+            await _db.SaveChangesAsync();
+            return RedirectToPage("Index");
         }
 
         [HttpGet]
@@ -37,7 +44,6 @@ namespace TalepYonetim.Pages
             var subCategories = _db.AltKategoriler
                 .Where(u => u.KategoriId == talepEdilenKategoriId)
                 .ToList();
-
             return new JsonResult(subCategories);
         }
 

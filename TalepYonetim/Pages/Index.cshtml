@@ -3,6 +3,25 @@
 @{
     ViewData["Title"] = "Home page";
 }
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+@* <head>
+    <!-- Bootstrap CSS -->
+    
+
+    <!-- jQuery -->
+
+    <!-- Popper.js -->
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        // Your script here
+    </script>
+
+</head> *@
+
 
 <div class="container p-3">
 	<div class="row pt-4">
@@ -59,7 +78,7 @@
                         <div class=" btn-group-justified" role="group">
                             <button type="button" class="btn btn-success btn-block">Onayla</button>
                             <button type="button" class="btn btn-warning btn-block">Düzenle</button>
-                            <button type="button" class="btn btn-danger  btn-block">Sil</button>
+                            <button type="button" class="btn btn-danger btn-block delete-button" data-talep-id="@obj.Id">Sil</button>
                         </div>
                     </td>
                 </tr>
@@ -119,4 +138,116 @@
     </div>
 
 
+
+
 </div>
+
+<!-- Modal for Delete Confirmation -->
+<div id="deleteConfirmationModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this Talep?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button id="deleteTalepButton" class="btn btn-danger">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".delete-button").click(function () {
+            // Show the delete confirmation modal
+            $("#deleteConfirmationModal").modal("show");
+
+            // Get the Talep ID from the data attribute of the clicked button
+            var talepId = $(this).data("talep-id");
+
+            // Set the Talep ID for the delete button
+            $("#deleteTalepButton").data("talep-id", talepId);
+        });
+
+        $("#deleteTalepButton").click(function () {
+            console.log("hello i am clicked");
+            var talepId = $(this).data("talep-id");
+            console.log(talepId);
+
+            $.ajax({
+                type: 'POST',
+                url: '/',
+                data: JSON.stringify(talepId),
+                success: function () {
+                    // Handle success, if needed
+                    console.log("Delete successful");
+                    // Optionally, you can redirect to another page or update the UI
+                    // window.location.href = "/SomeOtherPage";
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors, if needed
+                    console.error("Error deleting Talep:", status, error);
+                },
+                dataType: "json",
+                contentType: "application/json",
+                complete: function () {
+                    // Optionally, close the modal
+                    $("#deleteConfirmationModal").modal("hide");
+                }
+            });
+        });
+    });
+</script>
+@* 
+
+<!-- Existing code for Talep fields -->
+<!-- JavaScript for Delete Confirmation -->
+<script>
+    $(".delete-button").click(function () {
+        // Show the delete confirmation modal
+        $("#deleteConfirmationModal").modal("show")
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $(".deleteTalepButton").click(function () {
+            console.log("hello i am clicked");
+            var talepId = $(this).data("talep-id");
+            console.log(talepId);
+
+            $.ajax({
+                method: "POST",
+                url: "/Delete?handler=OnPostDeleteTalep",
+                data: { id: talepId },
+                success: function (data) {
+                    // Handle success, if needed
+                    console.log("Delete successful");
+                    // Optionally, you can redirect to another page or update the UI
+                    // window.location.href = "/SomeOtherPage";
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors, if needed
+                    console.error("Error deleting Talep:", status, error);
+                },
+                complete: function () {
+                    // Optionally, close the modal
+                    $("#deleteConfirmationModal").modal("hide");
+                }
+            });
+        });
+    });
+
+
+</script>
+ *@
+
+
+

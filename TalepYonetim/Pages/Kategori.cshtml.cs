@@ -13,6 +13,7 @@ namespace TalepYonetim.Pages
 		public IEnumerable<AltKategori> AltKategoriler { get; set; }
 		public IEnumerable<Kategori> Kategoriler { get; set; }
 		public IEnumerable<Talep> Talepler {  get; set; } 
+
 		public KategoriModel(ApplicationDbContext db)
 		{
 			_db = db;
@@ -30,6 +31,9 @@ namespace TalepYonetim.Pages
 				EdenSoyisim = "Boyacý",
 				AltKategori = bilg
 			};
+
+			//_db.Add(talep);
+			//_db.SaveChanges();
 
 		}
 

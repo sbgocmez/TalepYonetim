@@ -16,7 +16,7 @@
                 <input asp-for="@Model.Talep.Aciklama" class="form-control" />
 
                 <label asp-for="@Model.Talep.Adet">Adet</label>
-                <input asp-for="@Model.Talep.Adet" class="form-control" />
+                <input asp-for="@Model.Talep.Adet" class="form-control" id="adet" />
 
                 <label asp-for="@Model.Talep.Edenİsim">Talep Edenin Adı</label>
                 <input asp-for="@Model.Talep.Edenİsim" class="form-control" />
@@ -24,12 +24,12 @@
                 <label asp-for="@Model.Talep.EdenSoyisim">Talep Edenin Soyadı</label>
                 <input asp-for="@Model.Talep.EdenSoyisim" class="form-control" />
                 <hr />
-                <button type="submit" class="btn btn-success" style="width:150px">Insert</button>
             </div>
 
             <div class="mb-3">
                 <label for="talepKategoriId" class="form-label">Kategori</label>
                 <select class="form-control" id="talepKategoriId">
+                    <option></option>
                     @foreach (var kategori in Model.Kategoriler)
                     {
                         <option value="@kategori.Id">@kategori.Name</option>
@@ -39,58 +39,70 @@
             </div>
 
             <div class="mb-3">
-                <label for="subCategory" class="form-label">Alt Kategori</label>
+                <label asp-for="@Model.selectedAltKategori" class="form-label">Alt Kategori</label>
                 <select class="form-control" id="subCategory" name="subCategory">
                     <!-- Options will be dynamically populated using jQuery AJAX -->
                 </select>
+
+                <input type="hidden" id="hiddenAltKategoriId" asp-for="@Model.Talep.AltKategoriId" />
+                <input type="hidden" id="hiddenAltKategori" asp-for="@Model.Talep.AltKategori" />
+              
+            </div>
+                
             </div>
 
             <script>
                 console.log("hellooooooo");
                 </script>
-
-            <script>
-                $(document).ready(function () {
-                    console.log("helloooo222ooo");
-                    // Event listener for the main category dropdown change
-                    $('#talepKategoriId').change(function () {
-                        // Clear the existing options
-                        $('#subCategory').empty();
-
-                        console.log("changedd");
-                        // Get the selected main category
-                        var selectedMainCategory = $(this).val();
-
-                        console.log(selectedMainCategory);
-                        // ajax call
-                        $.ajax({
-                            type: 'GET',
-                            url: '/Ekle?handler=AltKategoriler', // bu syntax onemli OnGet otomotikmen algilaniyor razordan
-                            data: { talepEdilenKategoriId: selectedMainCategory },
-                            dataType: 'json',
-                          
-                            success: function (subCategories) {
-                                //$('#subCategory').empty();
-                                console.log("Received subCategories:", subCategories);
-
-                                // Populate the subcategory dropdown based on the response
-                                $.each(subCategories, function (index, subCategory) {
-                                    $('#subCategory').append($('<option>', {
-                                        value: subCategory.id, // replace with the actual property name for the value
-                                        text: subCategory.name // replace with the actual property name for the text
-                                    }));
-                                });
-                            },
-                            error: function () {
-                                console.error('Error fetching subcategories');
-                            }
-                        });
-                    });
-                });
-            </script>
-           
-
         </div>
-
+        <button type="submit" class="btn btn-success" style="width:150px">Insert</button>
     </div>
 </form>
+
+<script>
+    $(document).ready(function () {
+        console.log("helloooo222ooo");
+        // Event listener for the main category dropdown change
+        $('#talepKategoriId').change(function () {
+            // Clear the existing options
+            $('#subCategory').empty();
+
+            console.log("changedd");
+            // Get the selected main category
+            var selectedMainCategory = $(this).val();
+
+            console.log(selectedMainCategory);
+            // ajax call
+            $.ajax({
+                type: 'GET',
+                url: '/Ekle?handler=AltKategoriler', // bu syntax onemli OnGet otomotikmen algilaniyor razordan
+                data: { talepEdilenKategoriId: selectedMainCategory },
+                dataType: 'json',
+
+                success: function (subCategories) {
+                    //$('#subCategory').empty();
+                    console.log("Received subCategories:", subCategories);
+
+                    // Populate the subcategory dropdown based on the response
+                    $.each(subCategories, function (index, subCategory) {
+                        $('#subCategory').append($('<option>', {
+                            value: subCategory.id, // replace with the actual property name for the value
+                            text: subCategory.name // replace with the actual property name for the text
+                        }));
+                        // Clear and set the hidden input fields with the selected ALT kategori values
+                        $("#hiddenAltKategoriId").val('');
+                        $("#hiddenAltKategori").val('');
+                    });  
+                },
+                error: function () {
+                    console.error('Error fetching subcategories');
+                }
+            });
+        });
+        $("#subCategory").change(function () {
+            // Set the hidden input field with the selected ALT kategori value
+            $("#hiddenAltKategoriId").val($(this).val());
+            $("#hiddenAltKategori").val($("#talepAltKategoriId option:selected").text());
+        });
+    });
+</script>
