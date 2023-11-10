@@ -27,7 +27,7 @@ namespace TalepYonetim.Pages
         //public int Id { get; set; }
 
         [HttpPost]
-        public async Task<IActionResult> OnPost(int id)
+        public async Task<IActionResult> OnPostTalepSil(int id)
         {
             var talep = await _db.Talepler.FindAsync(id);
 

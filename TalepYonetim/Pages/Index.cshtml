@@ -166,13 +166,8 @@
 <script>
     $(document).ready(function () {
         $(".delete-button").click(function () {
-            // Show the delete confirmation modal
             $("#deleteConfirmationModal").modal("show");
-
-            // Get the Talep ID from the data attribute of the clicked button
             var talepId = $(this).data("talep-id");
-
-            // Set the Talep ID for the delete button
             $("#deleteTalepButton").data("talep-id", talepId);
         });
 
@@ -183,22 +178,18 @@
 
             $.ajax({
                 type: 'POST',
-                url: '/',
+                url: '/Index?handler=TalepSil',
                 data: JSON.stringify(talepId),
-                success: function () {
-                    // Handle success, if needed
+                success: function (talepId) {
                     console.log("Delete successful");
-                    // Optionally, you can redirect to another page or update the UI
-                    // window.location.href = "/SomeOtherPage";
+                    
                 },
                 error: function (xhr, status, error) {
-                    // Handle errors, if needed
                     console.error("Error deleting Talep:", status, error);
                 },
                 dataType: "json",
                 contentType: "application/json",
                 complete: function () {
-                    // Optionally, close the modal
                     $("#deleteConfirmationModal").modal("hide");
                 }
             });
