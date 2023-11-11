@@ -23,13 +23,18 @@ namespace TalepYonetim.Pages
 			Talepler = _db.Talepler.Include(a => a.AltKategori).ThenInclude(b=>b.Kategori);
 		}
 
+        public void OnGetTalepler()
+        {
+            Talepler = _db.Talepler.Include(a => a.AltKategori).ThenInclude(b => b.Kategori);
+        }
+
         //[BindProperty]
         //public int Id { get; set; }
 
         [HttpPost]
-        public async Task<IActionResult> OnPostTalepSil(int id)
+        public IActionResult OnPostTalepSil(int id)
         {
-            var talep = await _db.Talepler.FindAsync(id);
+            var talep = _db.Talepler.Find(id);
 
             if (talep == null)
             {
@@ -37,9 +42,28 @@ namespace TalepYonetim.Pages
             }
 
             _db.Talepler.Remove(talep);
-            await _db.SaveChangesAsync();
+            _db.SaveChanges();
 
-            return RedirectToPage("Index");
+            return new JsonResult(new { success = true, talepId = id });
+        }
+
+        [HttpPost]
+        public IActionResult OnPostTalepOnayla(int id, int onay)
+        {
+            var talep = _db.Talepler.Find(id);
+
+            if (talep == null)
+            {
+                return NotFound();
+            }
+            if (talep.Onaylandi != onay)
+            {
+                talep.Onaylandi = onay;
+            }
+            //talep.Onaylandi = talep.Onaylandi ^ onay;
+            _db.SaveChanges();
+
+            return new JsonResult(new { success = true, talepId = id });
         }
 
     }

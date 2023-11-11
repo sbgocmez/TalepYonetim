@@ -11,6 +11,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options=> options.UseSqlServ
     builder.Configuration.GetConnectionString("Default")
     ));
 
+builder.Services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
 var app = builder.Build();
 

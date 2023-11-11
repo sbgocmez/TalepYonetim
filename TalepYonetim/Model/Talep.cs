@@ -13,6 +13,7 @@ namespace TalepYonetim.Model
         public string Edenİsim {  get; set; }
         public string EdenSoyisim { get; set; }
         public virtual AltKategori AltKategori { get; set; } = new AltKategori();
+        public int Onaylandi { get; set; } = 0;
 
     }
 }
