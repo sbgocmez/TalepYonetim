@@ -3,6 +3,24 @@
 @{
     ViewData["Title"] = "Yeni Talep";
 }
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+@* <script>
+    $(document).ready(function () {
+        // Set the selected value based on Talep.AltKategoriId when the page loads
+
+        $('#altKategori').val('@Model.Talep.AltKategoriId');
+        console.log(@Model.Talep.AltKategoriId);
+
+        // Other scripts...
+    }); *@
+@* </script> *@
+
+<script>
+    $(document).ready(function () {
+        // Set the value of the option with the ID 'seciliTalepAltkategorisi'
+        $('#altKategori').text("hello");
+    });
+</script>
 
 <form method="post">
     <!-- Other form fields -->
@@ -25,8 +43,8 @@
     
     <div class="mb-3">
         <label for="talepKategoriId" class="form-label">Kategori</label>
-        <select class="form-control" id="talepKategoriId" asp-for="AltKategori.KategoriId" required>
-            <option value="">Select a Kategori</option>
+        <select class="form-control" id="talepKategoriId" asp-for="Talep.AltKategori.KategoriId" required>
+            <option value="Talep.AltKategori.Kategori.Name">Select a Kategori</option>
             @foreach (var kategori in Model.Kategoriler)
             {
                 <option value="@kategori.Id">@kategori.Name</option>
@@ -38,19 +56,65 @@
     <div class="mb-3">
         <label for="altKategori" class="form-label">Alt Kategori</label>
         <select class="form-control" id="altKategori" asp-for="Talep.AltKategoriId" required>
-            <!-- Options will be dynamically populated using jQuery AJAX -->
+            @* <option value="Talep.AltKategori.Kategori.Name" id = "seciliTalepAltkategorisi">Select a Kategori</option> *@
         </select>
         <span asp-validation-for="Talep.AltKategoriId" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-success" style="width:150px">Insert</button>
 </form>
+@* 
+<script>
+    $(document).ready(function () {
+        var defaultAltKategoriId = @Json.Serialize(Model.Talep.AltKategoriId);
+        //$('#altKategori').val("hello");
+        //$('#altKategori').val('@Model.Talep.AltKategoriId');
+
+        $('#talepKategoriId').change(function () {
+            $('#altKategori').empty();
+
+            var secilenKategori = $(this).val();
+
+            $.ajax({
+                type: 'GET',
+                url: '/Ekle?handler=AltKategoriler',
+                data: { talepEdilenKategoriId: secilenKategori },
+                dataType: 'json',
+
+                success: function (altKategoriler) {
+                    $.each(altKategoriler, function (index, altKategori) {
+                        $('#altKategori').append($('<option>', {
+                            value: altKategori.id,
+                            text: altKategori.name
+                        }));
+                    });
+
+                    // Set the selected value after populating the options
+                    $('#altKategori').val('@Model.Talep.AltKategoriId');
+                },
+                error: function () {
+                    console.error('Error fetching subcategories');
+                }
+            });
+        });
+
+        $('form').submit(function (e) {
+            if (!this.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            $(this).addClass('was-validated');
+        });
+    });
+</script>
+ *@
 
 @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         $(document).ready(function () {
-            // Event listener for the main category dropdown change
+            $('#seciliTalepAltkategorisi').val("hello");
+            
             $('#talepKategoriId').change(function () {
                 //
                 $('#altKategori').empty();

@@ -9,7 +9,7 @@
 
 @* popuplar burada *@
 @await Html.PartialAsync("_Modal") 
-
+@Html.AntiForgeryToken()
 <div class="container p-3">
 	<div class="row pt-4">
 		<div class="col-6">
@@ -70,7 +70,7 @@
                     <td class="text-center" width="25%">
                         <div class=" btn-group-justified" role="group">
                             <button type="button" class="btn btn-success onayla-button" id="onaylabutonu" data-talep-id="@obj.Id">Onayla</button>
-                            <button type="button" class="btn btn-warning">Düzenle</button>
+                            <a type="button" class="btn btn-warning duzenle-button" id="duzenlebutonu" data-talep-id="@obj.Id s" asp-page="/Ekle" asp-route-id="@obj.Id">Düzenle</a>
                             <button type="button" class="btn btn-danger delete-button" id="silbutonu" data-talep-id="@obj.Id">Sil</button>
                             @Html.AntiForgeryToken()
                         </div>
@@ -146,3 +146,25 @@
     </div>
 
 </div>
+
+@* <script>
+    $(document).ready(function () {
+        $(".duzenle-button").click(function () {
+            var talepId = $(this).data("talep-id");
+            
+            $.ajax({
+                type: 'GET',
+                url: '/Ekle',
+                data: { id: talepId },
+                //dataType: 'json',
+                success: function () {
+                    console.log("Duzenleme successful");
+                    //console.log(talepDetails);
+                },
+                error: function () {
+                    console.error('Error duzenleme');
+                }
+            });
+        });
+    });
+</script> *@
