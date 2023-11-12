@@ -38,7 +38,7 @@ namespace TalepYonetim.Pages
             if (id.HasValue)
             {
                 Talep = _db.Talepler.Find(id);
-                Talep.Id = id.Value;
+                //Talep.Id = id.Value;
                 var alt_kategori = _db.AltKategoriler.Include(a => a.Kategori).First(u => u.Id == Talep.AltKategoriId);
                 var kategori = _db.Kategoriler.First(a => a.Id == alt_kategori.KategoriId);
 
