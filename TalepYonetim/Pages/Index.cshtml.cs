@@ -18,19 +18,13 @@ namespace TalepYonetim.Pages
         {
             _db = db;
         }
+        // ana sayfa talepleri goster
         public void OnGet()
         {
 			Talepler = _db.Talepler.Include(a => a.AltKategori).ThenInclude(b=>b.Kategori);
 		}
 
-        public void OnGetTalepler()
-        {
-            Talepler = _db.Talepler.Include(a => a.AltKategori).ThenInclude(b => b.Kategori);
-        }
-
-        //[BindProperty]
-        //public int Id { get; set; }
-
+        // modal popup ile talep silme
         [HttpPost]
         public IActionResult OnPostTalepSil(int id)
         {
@@ -47,6 +41,7 @@ namespace TalepYonetim.Pages
             return new JsonResult(new { success = true, talepId = id });
         }
 
+        // modal popup or checkbox ile talep onaylama/kaldirma
         [HttpPost]
         public IActionResult OnPostTalepOnayla(int id, int onay)
         {
@@ -56,11 +51,11 @@ namespace TalepYonetim.Pages
             {
                 return NotFound();
             }
+
             if (talep.Onaylandi != onay)
             {
                 talep.Onaylandi = onay;
             }
-            //talep.Onaylandi = talep.Onaylandi ^ onay;
             _db.SaveChanges();
 
             return new JsonResult(new { success = true, talepId = id });

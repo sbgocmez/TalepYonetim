@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TalepYonetim.Model
@@ -10,6 +11,7 @@ namespace TalepYonetim.Model
         //public int KategoriId { get; set; }
         public string Name { get; set; }
 		[ForeignKey(nameof(Kategori))]
+        [Required(ErrorMessage = "Kategori bilgisi gereklidir.")]
         public int KategoriId { get; set; }
 		public virtual Kategori Kategori { get; set; } = new Kategori ();
         public virtual ICollection<Talep> Talepler{ get; set; } = new List<Talep> ();

@@ -31,7 +31,7 @@ namespace TalepYonetim.Pages
 
         public async Task<IActionResult> OnPost()
         {
-            // direkt altkategori donebilsem cok daha iyi olucak
+            // direkt altkategori donebilsem cok daha iyi olucak suan id ile geliyor
             var alt = _db.AltKategoriler.First(alt => alt.Id == Talep.AltKategoriId);
             Talep.AltKategori = alt;
 
