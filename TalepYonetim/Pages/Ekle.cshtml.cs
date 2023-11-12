@@ -38,6 +38,7 @@ namespace TalepYonetim.Pages
             if (id.HasValue)
             {
                 Talep = _db.Talepler.Find(id);
+                Talep.Id = id.Value;
                 var alt_kategori = _db.AltKategoriler.Include(a => a.Kategori).First(u => u.Id == Talep.AltKategoriId);
                 var kategori = _db.Kategoriler.First(a => a.Id == alt_kategori.KategoriId);
 
@@ -50,8 +51,27 @@ namespace TalepYonetim.Pages
         }
         public async Task<IActionResult> OnPost()
         {
+            if (Talep.Id != 0)
+            {
+                var varolanTalep = _db.Talepler.Find(Talep.Id);
+                varolanTalep.Adet = Talep.Adet;
+                varolanTalep.EdenSoyisim = Talep.EdenSoyisim;
+                varolanTalep.Edenİsim = Talep.Edenİsim;
+                varolanTalep.Aciklama = Talep.Aciklama;
+                varolanTalep.Onaylandi = Talep.Onaylandi;
+
+                var alt_kategori = _db.AltKategoriler.Include(a => a.Kategori).First(u => u.Id == Talep.AltKategoriId);
+                varolanTalep.AltKategori = alt_kategori;
+                varolanTalep.AltKategoriId = alt_kategori.Id;
+
+                _db.SaveChanges();
+                return RedirectToPage("Index");
+                //var kategori = _db.Kategoriler.First(a => a.Id == alt_kategori.KategoriId);
+
+            }
+            
             // direkt altkategori donebilsem cok daha iyi olucak suan id ile geliyor
-            var alt = _db.AltKategoriler.First(alt => alt.Id == Talep.AltKategoriId);
+            var alt = _db.AltKategoriler.Include(b=>b.Kategori).First(alt => alt.Id == Talep.AltKategoriId);
             Talep.AltKategori = alt;
 
             await _db.Talepler.AddAsync(Talep);

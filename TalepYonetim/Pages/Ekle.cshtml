@@ -4,16 +4,6 @@
     ViewData["Title"] = "Yeni Talep";
 }
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-@* <script>
-    $(document).ready(function () {
-        // Set the selected value based on Talep.AltKategoriId when the page loads
-
-        $('#altKategori').val('@Model.Talep.AltKategoriId');
-        console.log(@Model.Talep.AltKategoriId);
-
-        // Other scripts...
-    }); *@
-@* </script> *@
 
 <script>
     $(document).ready(function () {
@@ -24,6 +14,9 @@
 
 <form method="post">
     <!-- Other form fields -->
+   @*  <label asp-for="Talep.Id">Açıklama</label>
+    <input asp-for="Talep.Id" class="form-control" /> *@
+
     <label asp-for="Talep.Aciklama">Açıklama</label>
     <input asp-for="Talep.Aciklama" class="form-control" />
     @* <span asp-validation-for="Talep.Aciklama" class="text-danger"></span> *@
@@ -62,53 +55,9 @@
     </div>
 
     <button type="submit" class="btn btn-success" style="width:150px">Insert</button>
+    <input type="hidden" asp-for="Talep.Id" />
 </form>
-@* 
-<script>
-    $(document).ready(function () {
-        var defaultAltKategoriId = @Json.Serialize(Model.Talep.AltKategoriId);
-        //$('#altKategori').val("hello");
-        //$('#altKategori').val('@Model.Talep.AltKategoriId');
 
-        $('#talepKategoriId').change(function () {
-            $('#altKategori').empty();
-
-            var secilenKategori = $(this).val();
-
-            $.ajax({
-                type: 'GET',
-                url: '/Ekle?handler=AltKategoriler',
-                data: { talepEdilenKategoriId: secilenKategori },
-                dataType: 'json',
-
-                success: function (altKategoriler) {
-                    $.each(altKategoriler, function (index, altKategori) {
-                        $('#altKategori').append($('<option>', {
-                            value: altKategori.id,
-                            text: altKategori.name
-                        }));
-                    });
-
-                    // Set the selected value after populating the options
-                    $('#altKategori').val('@Model.Talep.AltKategoriId');
-                },
-                error: function () {
-                    console.error('Error fetching subcategories');
-                }
-            });
-        });
-
-        $('form').submit(function (e) {
-            if (!this.checkValidity()) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-
-            $(this).addClass('was-validated');
-        });
-    });
-</script>
- *@
 
 @section Scripts {
     <script>
