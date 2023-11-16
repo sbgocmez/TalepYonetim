@@ -26,10 +26,10 @@ namespace TalepYonetim.Pages
             {{ 0, "Yok" }, { 1, "Var" }};
 
             OnKontrolDurumDict = new Dictionary<int, string>
-            {{0,"Ön deðerleme"}, {1, "Amir onayýnda"}, {2, "Amir onayý alýndý"}};
+            {{0,"Ön Deðerleme Bekliyor"}, {1, "Amir onayýnda"}, {2, "Amir onayý alýndý"}};
 
             BasvuruDurumDict = new Dictionary<int, string>
-            {{0,"Baþvuru bekleniyor"}, {1, "Baþvuru onaylandý"}, {2, "Baþvuru reddedildi"}, {3, "KPSS puan sýralamasýna giremedi"}};
+            {{0,"Baþvuru Bekleniyor"}, {1, "Baþvuru onaylandý"}, {2, "Baþvuru reddedildi"}, {3, "KPSS puan sýralamasýna giremedi"}};
         }
 
         public IActionResult OnGet(int? id)
@@ -46,11 +46,11 @@ namespace TalepYonetim.Pages
         public async Task<IActionResult> OnPost()
         {
             Basvuru.OnKontrolDurumu = 1; // 0 1 ve 2 tercihleri icin durum amire gonderildi
-            Basvuru.IptalAciklamasi = ""; // burasi amirden gelince dolabilir.
+            Basvuru.IptalAciklamasi = "-"; // burasi amirden gelince dolabilir.
             
             if (Basvuru.OnayDurumu == 1) // amire onaya
             {
-                Basvuru.OnKontrolIptalAciklamasi = "";
+                Basvuru.OnKontrolIptalAciklamasi = "-";
             }
             else if (Basvuru.OnayDurumu == 2) // amire kpss sebebiyle iptale
             {

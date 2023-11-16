@@ -4,6 +4,7 @@ using TalepYonetim.Data;
 using TalepYonetim.Model;
 using ClosedXML.Excel;
 using System;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace TalepYonetim.Pages
 {
@@ -30,12 +31,12 @@ namespace TalepYonetim.Pages
 
             OnKontrolDurumDict = new Dictionary<int, string>
             {
-                {0,"Ön deðerleme"}, {1, "Amir onayýnda"}, {2, "Amir onayý alýndý"}
+                {0,"Ön Deðerleme Bekliyor"}, {1, "Amir onayýnda"}, {2, "Amir onayý alýndý"}
             };
 
             BasvuruDurumDict = new Dictionary<int, string>
             {
-                {0,"Baþvuru bekleniyor"}, {1, "Baþvuru onaylandý"}, {2, "Baþvuru reddedildi"}, {3, "KPSS puan sýralamasýna giremedi"}
+                {0,"Baþvuru Bekleniyor"}, {1, "Baþvuru onaylandý"}, {2, "Baþvuru reddedildi"}, {3, "KPSS puan sýralamasýna giremedi"}
             };
 
         }
@@ -43,6 +44,7 @@ namespace TalepYonetim.Pages
         public void OnGet()
         {
             Basvurular = _db.Basvurular;
+
         }
 
         public void InitializeWorksheet()
@@ -77,8 +79,13 @@ namespace TalepYonetim.Pages
             worksheet.Cell(index, 10).Value = "-";
             worksheet.Cell(index, 11).Value = 1;
             worksheet.Cell(index, 12).Value = "";
+            worksheet.Row(index).AdjustToContents();
+
+
 
             range = worksheet.Range("A1:L2");
+            //IXLRange range2 = worksheet.Range("A2:L2");
+            //range2.Style.Alignment.WrapText = true;
 
         }
 
@@ -88,6 +95,9 @@ namespace TalepYonetim.Pages
             var totalEntryNumber = data.Count() + 1;
             range = worksheet.Range($"A1:L{totalEntryNumber}");
             int index = 1;
+
+            //range.Style.Alignment.WrapText = true;
+
             foreach (var item in data)
             {
                 index++;
@@ -95,15 +105,17 @@ namespace TalepYonetim.Pages
                 worksheet.Cell(index, 2).Value = item.TCIdentity;
                 worksheet.Cell(index, 3).Value = item.Ad;
                 worksheet.Cell(index, 4).Value = item.Soyad;
-                worksheet.Cell(index, 5).Value = item.BasvuruDurum;
-                worksheet.Cell(index, 6).Value = item.LiseMezuniyet;
-                worksheet.Cell(index, 7).Value = item.UniversiteMezuniyet;
-                worksheet.Cell(index, 8).Value = item.YabanciDil;
-                worksheet.Cell(index, 9).Value = item.OnKontrolDurumu;
+                worksheet.Cell(index, 5).Value = BasvuruDurumDict[item.BasvuruDurum];
+                worksheet.Cell(index, 6).Value = BeyanDict[item.LiseMezuniyet];
+                worksheet.Cell(index, 7).Value = BeyanDict[item.UniversiteMezuniyet];
+                worksheet.Cell(index, 8).Value = BeyanDict[item.YabanciDil];
+                worksheet.Cell(index, 9).Value = OnKontrolDurumDict[item.OnKontrolDurumu];
                 worksheet.Cell(index, 10).Value = item.OnKontrolIptalAciklamasi;
                 worksheet.Cell(index, 11).Value = item.OnayDurumu;
                 worksheet.Cell(index, 12).Value = item.IptalAciklamasi;
+                worksheet.Row(index).AdjustToContents();
             }
+            //range.Style.Alignment.WrapText = true;
         }
 
         public void organizeTable()
