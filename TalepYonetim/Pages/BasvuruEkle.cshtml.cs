@@ -45,8 +45,31 @@ namespace TalepYonetim.Pages
         }
         public async Task<IActionResult> OnPost()
         {
+            Basvuru.OnKontrolDurumu = 1; // 0 1 ve 2 tercihleri icin durum amire gonderildi
+            Basvuru.IptalAciklamasi = ""; // burasi amirden gelince dolabilir.
+            
+            if (Basvuru.OnayDurumu == 1) // amire onaya
+            {
+                Basvuru.OnKontrolIptalAciklamasi = "";
+            }
+            else if (Basvuru.OnayDurumu == 2) // amire kpss sebebiyle iptale
+            {
+                Basvuru.OnKontrolIptalAciklamasi = "KPSS sýralamasý yetersizdir.";
+            }
+            else if (Basvuru.OnayDurumu == 3) // amire gonderilmedi, on degerlemede
+            {
+                Basvuru.OnKontrolDurumu = 0;
+                Basvuru.OnKontrolIptalAciklamasi = "";
+            }
+            
+
             if (Basvuru.Id != 0)
             {
+                //if (Basvuru.OnayDurumu != 0)
+                //{
+                //    Basvuru.OnKontrolIptalAciklamasi = "";
+                //    Basvuru.IptalAciklamasi = "";
+                //}
                 var basvuru = _db.Basvurular.Find(Basvuru.Id);
                 basvuru.SiraNo = Basvuru.SiraNo;
                 basvuru.TCIdentity = Basvuru.TCIdentity;
@@ -69,15 +92,6 @@ namespace TalepYonetim.Pages
             await _db.Basvurular.AddAsync(Basvuru);
             await _db.SaveChangesAsync();
             return RedirectToPage("BasvuruIndex");
-        }
-
-        [HttpGet]
-        public IActionResult OnGetAltKategoriler(int talepEdilenKategoriId)
-        {
-            var altKategoriler = _db.AltKategoriler
-                .Where(u => u.KategoriId == talepEdilenKategoriId)
-                .ToList();
-            return new JsonResult(altKategoriler);
         }
 
     }

@@ -1,4 +1,114 @@
 ﻿@page
-@model TalepYonetim.Pages.BasvuruEkleModel
+@model BasvuruEkleModel
 @{
+    ViewData["Title"] = "Basvuru Ekle";
 }
+
+<div class="container p-3">
+    <h2 class="text-primary">Yeni Başvuru Ekle</h2>
+
+    <form method="post">
+        <div class="form-group">
+            <label for="SiraNo">Sıra No:</label>
+            <input type="text" class="form-control" asp-for="Basvuru.SiraNo" />
+        </div>
+
+        <div class="form-group">
+            <label for="TCIdentity">TC Kimlik Numarası:</label>
+            <input type="text" class="form-control" asp-for="Basvuru.TCIdentity" />
+        </div>
+
+        <div class="form-group">
+            <label for="Ad">Ad:</label>
+            <input type="text" class="form-control" asp-for="Basvuru.Ad" />
+        </div>
+        <div class="form-group">
+            <label for="Soyad">Soyad:</label>
+            <input type="text" class="form-control" asp-for="Basvuru.Soyad" />
+        </div>
+
+        <div class="form-group">
+            <label for="LiseMezuniyet">Lise Mezuniyet Beyanı:</label>
+            <select class="form-control" asp-for="Basvuru.LiseMezuniyet">
+                @foreach (var item in Model.BeyanDict)
+                {
+                    <option value="@item.Key">@item.Value</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="UniversiteMezuniyet">Üniversite Mezuniyet Beyanı:</label>
+            <select class="form-control" asp-for="Basvuru.UniversiteMezuniyet">
+                @foreach (var item in Model.BeyanDict)
+                {
+                    <option value="@item.Key">@item.Value</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="YabanciDil">Yabancı Dil Beyanı:</label>
+            <select class="form-control" asp-for="Basvuru.YabanciDil">
+                @foreach (var item in Model.BeyanDict)
+                {
+                    <option value="@item.Key">@item.Value</option>
+                }
+            </select>
+        </div>
+
+        @* <div class="form-group">
+            <label for="OnKontrolDurumu">Ön Kontrol Durumu:</label>
+            <select class="form-control" asp-for="Basvuru.OnKontrolDurumu" id="onkontroldurumu" onchange="toggleOnKontrol()">
+                @foreach (var item in Model.OnKontrolDurumDict)
+                {
+                    <option value="@item.Key">@item.Value</option>
+                }
+            </select>
+        </div> *@
+
+        <div class="form-group" id="OnayDurumu" style="display:block">
+            <label for="OnayDurumu">Onay Durumu:</label>
+            <select class="form-control" asp-for="Basvuru.OnayDurumu" id="OnayDurumu" onchange="toggleIptalAciklamasi()">
+                <option value="0">0 (İptal edilmek üzere amir onayına gönder)</option>
+                <option value="1">1 (Onaylanmak üzere amir onayına gönder)</option>
+                <option value="2">2 (Başvuru durumuna göre KPSS sıralaması yetersiz, amir onayına gönder)</option>
+                <option value="3">Onay durumu yok, ön değerlemede kalacak.</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="OnKontrolIptalAciklamasi" style="display:block">
+            <label for="OnKontrolIptalAciklamasi">Ön Kontrol İptal Açıklaması:</label>
+            <textarea class="form-control" asp-for="Basvuru.OnKontrolIptalAciklamasi" maxlength="450"></textarea>
+            <small class="form-text text-muted">Maximum 450 characters.</small>
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary">Başvuruyu Ekle</button>
+            <input type="hidden" asp-for="Basvuru.Id" />
+        </div>
+    </form>
+</div>
+
+<script>
+    function toggleIptalAciklamasi() {
+        var onayDurumuDropdown = document.getElementById("OnayDurumu");
+        var iptalAciklamasiField = document.getElementById("OnKontrolIptalAciklamasi");
+
+        iptalAciklamasiField.style.display = onayDurumuDropdown.value === "0" ? "block" : "none";
+        iptalAciklamasiField.value = "";
+        
+    }
+
+    function toggleOnKontrol() {
+        // var onKontrolDurumuDropdown = document.getElementById("OnKontrolDurumu");
+        // var iptalAciklamasiField = document.getElementById("OnKontrolIptalAciklamasi");
+        // var onayDurumuField= document.getElementById("OnayDurumu");
+
+        // // var iptalAciklamasiField = document.getElementById("OnKontrolIptalAciklamasi");
+
+        // onayDurumuField.style.display = onKontrolDurumuDropdown.value === "0" ? "block" : "none";
+        // iptalAciklamasiField.style.display = onKontrolDurumuDropdown.value === "0" ? "block" : "none";
+    }
+</script>
+
