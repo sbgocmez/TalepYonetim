@@ -1,0 +1,161 @@
+﻿@page
+@model BasvuruIndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js">
+</script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+@Html.AntiForgeryToken()
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Talepler</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-page="BasvuruEkle" class="btn btn-primary">
+                <i class="bi bi-plus-square"></i> &nbsp;Basvuru Ekle
+            </a>
+        </div>
+
+    </div>
+
+    <br /><br />
+
+    <table class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    Sıra No
+                </th>
+                <th>
+                    TCKN
+                </th>
+                <th>
+                    Ad
+                </th>
+                <th>
+                    Soyad
+                </th>
+                <th>
+                    Durum
+                </th>
+                <th>
+                    Lise Mezuniyet Beyanı
+                </th>
+                <th>
+                    Üniversite Mezuniyet Beyanı
+                </th>
+                <th>
+                    Yabancı Dil Beyanı
+                </th>
+                <th>
+                    Ön Kontrol Durumu
+                </th>
+                <th>
+                    Ön Kontrol İptal Açıklaması
+                </th>
+                <th>
+                    Ön Kontrol Onay Durumu
+                </th>
+                <th>
+                    İptal Açıklaması
+                </th>
+            </tr>
+            @{
+                int pageSize = 3; // Number of items per page
+                int currentPage = Request.Query["page"].FirstOrDefault() != null ? Convert.ToInt32(Request.Query["page"]) : 1; // Get current page from the query parameter, default to 1
+                var items = Model.Basvurular.Skip((currentPage - 1) * pageSize).Take(pageSize);
+                int totalPages = (int)Math.Ceiling((double)Model.Basvurular.Count() / pageSize);
+                int paginationSize = 3;
+                var half = (int)(paginationSize / 2);
+            }
+        </thead>
+        <tbody>
+            @foreach (var obj in items)
+            {
+                <tr id="rowtodelete" data-row-id="@obj.Id">
+                    <td width="9%">@obj.SiraNo</td>
+                    <td width="9%">@obj.TCIdentity</td>
+                    <td width="9%">@obj.Ad</td>
+                    <td width="9%">@obj.Soyad</td>
+                    <td width="9%">@Model.BasvuruDurumDict[obj.BasvuruDurum]</td>
+                    <td width="9%">@Model.BeyanDict[obj.LiseMezuniyet]</td>
+                    <td width="9%">@Model.BeyanDict[obj.UniversiteMezuniyet]</td>
+                    <td width="9%">@Model.BeyanDict[obj.YabanciDil]</td>
+                    <td width="9%">@Model.OnKontrolDurumDict[obj.OnKontrolDurumu]</td>
+                    <td width="9%">@obj.OnKontrolIptalAciklamasi</td>
+                    <td width="9%">@obj.OnayDurumu</td>
+                    <td width="9%">@obj.IptalAciklamasi</td>
+
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <!-- Compact Pagination -->
+    <div class="d-flex justify-content-center">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" href="?page=@(currentPage - 1)" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                @if (totalPages < paginationSize)
+                {
+                    // last page
+                    for (int i = 1; i <= totalPages; i++)
+                    {
+                        <li class="page-item @(i == currentPage ? "active" : "")">
+                            <a class="page-link" href="?page=@i">@i</a>
+                        </li>
+                    }
+
+                }
+
+                else if (currentPage == 1)
+                {
+                    // first page
+                    for (int i = currentPage; i < currentPage + paginationSize; i++)
+                    {
+                        <li class="page-item @(i == currentPage ? "active" : "")">
+                            <a class="page-link" href="?page=@i">@i</a>
+                        </li>
+                    }
+                }
+
+                else if (currentPage == totalPages)
+                {
+                    // last page
+                    for (int i = currentPage - paginationSize + 1; i <= currentPage; i++)
+                    {
+                        <li class="page-item @(i == currentPage ? "active" : "")">
+                            <a class="page-link" href="?page=@i">@i</a>
+                        </li>
+                    }
+
+                }
+                else
+                {
+                    // middle ones
+                    for (int i = Math.Max(1, currentPage - half); i <= Math.Min(totalPages, currentPage + half); i++)
+                    {
+                        <li class="page-item @(i == currentPage ? "active" : "")">
+                            <a class="page-link" href="?page=@i">@i</a>
+                        </li>
+                    }
+                }
+
+                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                    <a class="page-link" href="?page=@(currentPage + 1)" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+</div>

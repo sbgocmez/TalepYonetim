@@ -8,9 +8,9 @@ namespace TalepYonetim.Model
     {
         public int Id { get; set; }
         [Required]
-        public string SiraNo { get; set; } = string.Empty;
+        public int SiraNo { get; set; }
         [Required]
-        public int TCIdentity { get; set; }
+        public string TCIdentity { get; set; }
         public string Ad { get; set; } = "";
         public string Soyad { get; set; } = "";
         public int BasvuruDurum { get; set; } = 0;
