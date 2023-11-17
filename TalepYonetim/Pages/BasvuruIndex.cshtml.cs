@@ -5,6 +5,7 @@ using TalepYonetim.Model;
 using ClosedXML.Excel;
 using System;
 using DocumentFormat.OpenXml.Spreadsheet;
+using System.Security.Principal;
 
 namespace TalepYonetim.Pages
 {
@@ -15,10 +16,14 @@ namespace TalepYonetim.Pages
         public Dictionary<int, string> BeyanDict { get; set; }
         public Dictionary<int, string> OnKontrolDurumDict { get; set; }
         public Dictionary<int, string> BasvuruDurumDict { get; set; }
+        public IEnumerable<Basvuru> ExcelBasvurular { get; set; } = new List<Basvuru>();
 
         public XLWorkbook workbook = new XLWorkbook();
         public IXLWorksheet worksheet;
         public IXLRange range;
+
+        [BindProperty]
+        public int totalRows { get; set; }
 
         public BasvuruIndexModel(ApplicationDbContext db)
         {
@@ -169,6 +174,44 @@ namespace TalepYonetim.Pages
                 FileResult download = downloadExcel();
                 return download;
             }
+        }
+
+        public IActionResult OnPostImportExcel(IFormFile excelFile)
+        {
+            var successMessage = "";
+            if (excelFile == null || excelFile.Length == 0)
+            {
+                // Handle the case where no file is selected for upload
+                // You can add appropriate error messages or redirection here
+                successMessage = "Excel dosyasý yüklenirken bir hata ile karþýlaþýldý: [Dosya null, boþ].";
+                return Page();
+            }
+            var totalCols = 0;
+            using (var stream = new MemoryStream())
+            {
+                // Copy the uploaded file's content to the memory stream
+                excelFile.CopyTo(stream);
+                stream.Position = 0;
+                
+
+                // Load the Excel file from the stream
+                using (var importedWorkbook = new XLWorkbook(stream))
+                {
+                    var importedWorksheet = importedWorkbook.Worksheet(1);
+
+                    Console.WriteLine(importedWorksheet.LastRowUsed().RowNumber());
+
+                    totalRows = importedWorksheet.LastRowUsed().RowNumber();
+                    //totalCols = importedWorksheet.LastColumnUsed().ColumnNumber();
+
+                }
+                
+            }
+            successMessage = $"Yuklediginiz dosya {totalRows-1} satirdan olusmaktadir.";
+            TempData["ImportSuccessMessage"] = successMessage;
+
+            //Redirect to the index page or any other page after successful import
+            return RedirectToPage("/BasvuruIndex");
         }
 
     }
